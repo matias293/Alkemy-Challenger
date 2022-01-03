@@ -1,15 +1,17 @@
 import { Router } from 'express';
 
-import {movieController} from '../controllers/movie'
+import { movieController } from '../controllers/movie';
+import { validarJWT } from '../middleware/validateJWT';
 const router = Router();
 
-router.get('/',movieController.getMovie)
+router.get('/', movieController.getMovies);
 
-router.post('/',movieController.postMovie)
+router.get('/:id', movieController.getMovie);
 
-router.put('/',movieController.putMovie)
+router.post('/', validarJWT, movieController.postMovie);
 
-router.delete('/',movieController.deleteMovie)
+router.put('/', validarJWT, movieController.patch);
 
+router.delete('/', validarJWT, movieController.deleteMovie);
 
 export default router;

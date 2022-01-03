@@ -6,7 +6,7 @@ const puerto = Config.port || 8080;
 
 Server.listen(puerto, () => {
   sequelize
-    .sync({ force: true })
+    .sync({ force: false })
     .then(() => {
       console.log('Base de datos conectada');
     })

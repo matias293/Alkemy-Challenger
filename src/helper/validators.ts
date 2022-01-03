@@ -3,7 +3,7 @@ const Joi = require('joi');
 export const loginSchema = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
 
-  password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+  password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
 });
 
 export const signupSchema = Joi.object({
@@ -15,28 +15,31 @@ export const signupSchema = Joi.object({
 
   password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
 
-  repeatPassword: Joi.ref('password').required(),
+  repeat_password: Joi.ref('password'),
 });
 
 export const newCharacterSchema = Joi.object({
   name: Joi.string().required(),
-  edad: Joi.number().required(),
-  peso: Joi.number().required(),
-  historia: Joi.string().min(5).required(),
+  age: Joi.number().required(),
+  weight: Joi.number().required(),
+  history: Joi.string().min(5).required(),
 });
-
+export const getCharacter = Joi.object({
+  name: Joi.string(),
+  age: Joi.number(),
+  movie: Joi.number(),
+});
 export const updateCharacterSchema = Joi.object({
   name: Joi.string(),
-  edad: Joi.number(),
-  peso: Joi.number(),
-  historia: Joi.string().min(5),
+  age: Joi.number(),
+  weight: Joi.number(),
+  history: Joi.string().min(5),
 });
 
 export const newMovieSchema = Joi.object({
-  imagen: Joi.string().required(),
   title: Joi.string().required(),
-  createdAt: Joi.string().required(),
   calification: Joi.number().required(),
+  genero: Joi.number().required(),
 });
 
 export const movieUpdateSchema = Joi.object({

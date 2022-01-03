@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import moment from 'moment';
 
 import Movie from '../models/movie';
 import { newMovieSchema, movieUpdateSchema } from '../helper/validators';
@@ -7,7 +8,12 @@ import {
   MovieQuery,
   UpdateMovie,
   NewMovies,
+  // MovieFind,
 } from '../common/interfaces/movie.interface';
+
+interface MulterRequest extends Request {
+  file: any;
+}
 
 class MovieC {
   async movieExist(req: Request, res: Response, next: NextFunction) {
@@ -37,24 +43,41 @@ class MovieC {
         error.statusCode = 404;
         throw error;
       }
+      res.json(movies);
     } catch (error) {
       next(error);
     }
   }
 
   async getMovies(req: Request, res: Response, next: NextFunction) {
-    const { title, genre, order } = req.params;
+    const { title, genre, order } = req.query;
     let query: MovieQuery = {};
-    try {
-      if (title) query.title = title;
-      if (genre) query.genre = genre;
-      if (order) query.order = order;
 
-      if (Object.keys(query).length) {
-        const movies = await Movie.findAll({
-          where: query,
-          include: [{ association: 'personajes' }, { association: 'genre' }],
-        });
+    try {
+      if (title) query.title = title as string;
+      if (genre) query.genre = genre as string;
+      if (order) query.order = order as string;
+
+      if (title || genre || order) {
+        let movies: any = [];
+        if (title) {
+          movies = await Movie.findAll({
+            where: query,
+            include: [{ association: 'personajes' }, { association: 'genre' }],
+          });
+        }
+        if (order) {
+          console.log(order);
+          movies = await Movie.findAll({
+            order: [['createdAt', order as string]],
+            include: [{ association: 'personajes' }, { association: 'genre' }],
+          });
+        }
+        if (genre) {
+          movies = await Movie.findAll({
+            include: [{ association: 'personajes' }, { association: 'genre' }],
+          });
+        }
 
         if (movies.length === 0) {
           const error: Error = new Error(`Did't find any movies`);
@@ -62,18 +85,18 @@ class MovieC {
           throw error;
         }
         res.json(movies);
-      }
+      } else {
+        const characters = await Movie.findAll({
+          attributes: ['imagen', 'title', 'createdAt'],
+        });
 
-      const characters = await Movie.findAll({
-        attributes: ['imagen', 'title', 'createdAt'],
-      });
-
-      if (characters.length === 0) {
-        const error: Error = new Error(`Did't find any character`);
-        error.statusCode = 404;
-        throw error;
+        if (characters.length === 0) {
+          const error: Error = new Error(`Did't find any character`);
+          error.statusCode = 404;
+          throw error;
+        }
+        res.json(characters);
       }
-      res.json(characters);
     } catch (error) {
       next(error);
     }
@@ -82,13 +105,23 @@ class MovieC {
   async postMovie(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await newMovieSchema.validateAsync(req.body);
+      const foto = (req as MulterRequest).file;
+      if (!foto) {
+        const error: Error = new Error('Seleccione alguna imagen');
+        error.statusCode = 422;
+        throw error;
+      }
+      const imageUrl: string = foto.path.replace('\\', '/').split('/')[1];
+
       const newMovie: NewMovies = {
-        imagen: result.imagen,
+        imagen: imageUrl,
         title: result.title,
-        createdAt: result.createdAt,
+        createdAt: moment().format('DD/MM/YYYY HH:mm:ss'),
         calification: result.calification,
+        genero: result.genero,
       };
       await Movie.create(newMovie);
+      res.json(newMovie);
     } catch (error) {
       next(error);
     }
@@ -98,6 +131,7 @@ class MovieC {
     const { id } = req.params;
     try {
       const result = await movieUpdateSchema.validateAsync(req.body);
+
       if (Object.keys(result).length === 0) {
         const error: Error = new Error('Please insert some body');
         error.statusCode = 400;
@@ -118,7 +152,9 @@ class MovieC {
         msge: 'Movie updated',
         movieUpdated,
       });
-    } catch (error) {}
+    } catch (err: any) {
+      next(err);
+    }
   }
 
   async deleteMovie(req: Request, res: Response, next: NextFunction) {

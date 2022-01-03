@@ -1,6 +1,6 @@
 import {Sequelize} from 'sequelize'
 
-const sequelize = new Sequelize('nodealk','root','Matias,17',{
+const sequelize = new Sequelize('alkemy','root','Matias,17',{
     host: 'localhost',
     dialect: 'mysql',
     

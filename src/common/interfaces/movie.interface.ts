@@ -22,6 +22,7 @@ export interface NewMovies {
   title: string;
   createdAt: string;
   calification: number;
+  genero:number
 }
 
 export interface UpdateMovie {

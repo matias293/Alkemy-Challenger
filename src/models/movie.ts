@@ -23,7 +23,7 @@ Movie.init(
       allowNull: true,
     },
     createdAt: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     calification: {
@@ -37,17 +37,5 @@ Movie.init(
     timestamps: false,
   },
 );
-
-Movie.belongsTo(Genero, {
-  as: 'genre',
-  foreignKey: 'genero',
-});
-
-Movie.belongsToMany(Character, {
-  as: 'personajes',
-  through: 'films_personajes',
-  foreignKey: 'personajeId',
-  timestamps: false,
-});
 
 export default Movie;

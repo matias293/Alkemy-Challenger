@@ -11,24 +11,26 @@ class Auth {
     try {
       const result = await loginSchema.validateAsync(req.body);
 
-      const user = await User.findOne({
-        where: { email: result.email },
+      const user: any = await User.findOne({
+        where: { username: result.username },
       });
+
       if (!user) {
         const error: Error = new Error('Unauthorized');
         error.statusCode = 401;
         throw error;
       }
+      console.log(user.dataValues.password);
       const isValidPassword = bcrypt.compareSync(
         result.password,
-        user.password,
+        user.dataValues.password,
       );
       if (!isValidPassword) {
         const error: Error = new Error('Unauthorized');
         error.statusCode = 401;
         throw error;
       }
-      const token = await generarJWT(user.id);
+      const token = await generarJWT(user.dataValues.id as string);
 
       res.json({ token, msge: 'Logeado correctamente' });
     } catch (err: any) {
@@ -55,11 +57,11 @@ class Auth {
         email: result.email,
         password: bcrypt.hashSync(result.password, 10),
       };
-      User.create(usuario);
+      const newUser = await User.create(usuario);
 
       res.json({
         msge: 'Usuario creado correctamante',
-        user,
+        newUser,
       });
     } catch (err: any) {
       if (err.isJoi === true) err.statusCode = 400;

@@ -28,3 +28,4 @@ MovieCharacters.init(
     timestamps: false,
   },
 );
+export default MovieCharacters

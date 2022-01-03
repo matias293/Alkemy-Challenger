@@ -5,12 +5,17 @@ import {
   newCharacterSchema,
   updateCharacterSchema,
 } from '../helper/validators';
+import { getCharacter } from '../helper/validators';
 import {
   Error,
   NewCharacters,
   UpdateCharacters,
   Query,
 } from '../common/interfaces/character.interface';
+
+interface MulterRequest extends Request {
+  file: any;
+}
 
 class CharacterC {
   async characterExist(req: Request, res: Response, next: NextFunction) {
@@ -37,23 +42,25 @@ class CharacterC {
         error.statusCode = 404;
         throw error;
       }
+
+      res.json(character);
     } catch (error) {
       next(error);
     }
   }
 
   async getCharacters(req: Request, res: Response, next: NextFunction) {
-    const { name, age, movies } = req.params;
+    const { name, age, movie } = req.query;
     let query: Query = {};
+
     try {
-      if (name) query.name = name;
+      if (name) query.name = name as string;
       if (age) query.age = Number(age);
-      if (movies) query.movies = movies;
 
       if (Object.keys(query).length) {
         const characters = await Character.findAll({
-          where: query,
           include: [{ association: 'films', include: ['genre'] }],
+          where: query,
         });
 
         if (characters.length === 0) {
@@ -61,11 +68,12 @@ class CharacterC {
           error.statusCode = 404;
           throw error;
         }
-        res.json(characters);
+
+        return res.json(characters);
       }
 
       const characters = await Character.findAll({
-        attributes: ['imagen', 'nombre'],
+        attributes: ['picture', 'name'],
       });
 
       if (characters.length === 0) {
@@ -73,29 +81,39 @@ class CharacterC {
         error.statusCode = 404;
         throw error;
       }
+
       res.json(characters);
-    } catch (error) {
-      next(error);
+    } catch (err: any) {
+      next(err);
     }
   }
 
   async postCharacter(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await newCharacterSchema.validateAsync(req.body);
+      const foto = (req as MulterRequest).file;
+      if (!foto) {
+        const error: Error = new Error('Seleccione alguna imagen');
+        error.statusCode = 422;
+        throw error;
+      }
+      const imageUrl: string = foto.path.replace('\\', '/').split('/')[1];
+
       const newCharacter: NewCharacters = {
         name: result.name,
         age: result.age,
         weight: result.weight,
         history: result.history,
-        picture: result.picture,
+        picture: imageUrl,
       };
       await Character.create(newCharacter);
       res.status(201).json({
         msge: 'Character was added',
         newCharacter,
       });
-    } catch (error) {
-      next(error);
+    } catch (err: any) {
+      if (err.isJoi === true) err.statusCode = 400;
+      next(err);
     }
   }
 

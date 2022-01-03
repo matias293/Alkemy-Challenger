@@ -41,11 +41,6 @@ Character.init(
   },
 );
 
-Character.belongsToMany(Movie, {
-  as: 'films',
-  through: 'films_personajes',
-  foreignKey: 'filmId',
-  timestamps: false,
-});
+
 
 export default Character;

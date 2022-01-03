@@ -2,9 +2,9 @@ import Config from '../config/index';
 import { sign } from 'jsonwebtoken';
 import User from '../models/user';
 
-export const generarJWT = (user: User) => {
+export const generarJWT = (userId: string) => {
   return new Promise((resolve, reject) => {
-    const payload = user;
+    const payload = userId;
 
     sign(
       { user: payload },

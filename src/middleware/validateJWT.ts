@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { UsuarioJ } from '../common/interfaces/user.interface';
 import User from '../models/user';
 import Config from '../config/index';
 
@@ -21,7 +20,7 @@ export const validarJWT = async (
   const token = req.header('Bearer-Token');
 
   if (!token) {
-    return res.status(400).json({
+    return res.status(401).json({
       msg: 'No hay token en la petición',
     });
   }
@@ -30,12 +29,12 @@ export const validarJWT = async (
     const decoded: any = jwt.verify(token, Config.JWT_SECRET_KEY);
 
     if (!decoded) {
-      res.status(400).json({
+      res.status(401).json({
         msg: 'Token no válido',
       });
     }
-    const usuario = await User.findByPk(decoded.id as string);
-
+    console.log(decoded);
+    const usuario = await User.findByPk(decoded.user as string);
     if (!usuario) {
       return res.status(401).json({
         msg: 'Unathorized.',

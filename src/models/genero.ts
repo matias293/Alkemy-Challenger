@@ -30,9 +30,5 @@ Genero.init(
   },
 );
 
-Genero.hasMany(Movie, {
-  as: 'films',
-  foreignKey: 'genero',
-});
 
 export default Genero;
