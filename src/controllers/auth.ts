@@ -20,7 +20,7 @@ class Auth {
         error.statusCode = 401;
         throw error;
       }
-      console.log(user.dataValues.password);
+
       const isValidPassword = bcrypt.compareSync(
         result.password,
         user.dataValues.password,

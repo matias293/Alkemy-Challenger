@@ -66,7 +66,6 @@ class MovieC {
           });
         }
         if (order) {
-          console.log(order);
           movies = await Movie.findAll({
             order: [['createdAt', order as string]],
             include: [{ association: 'personajes' }, { association: 'genre' }],

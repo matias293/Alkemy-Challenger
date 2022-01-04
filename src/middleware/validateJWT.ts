@@ -33,7 +33,7 @@ export const validarJWT = async (
         msg: 'Token no válido',
       });
     }
-    console.log(decoded);
+
     const usuario = await User.findByPk(decoded.user as string);
     if (!usuario) {
       return res.status(401).json({
