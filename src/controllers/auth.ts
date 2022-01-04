@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import bcrypt, { compareSync } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 import User from '../models/user';
 import { Error, newUsuario } from '../common/interfaces/user.interface';
 import { loginSchema, signupSchema } from '../helper/validators';
 import { generarJWT } from '../helper/generarJWT';
+import { EmailService } from '../services/gmail';
 
 class Auth {
   async login(req: Request, res: Response, next: NextFunction) {
@@ -58,6 +59,9 @@ class Auth {
         password: bcrypt.hashSync(result.password, 10),
       };
       const newUser = await User.create(usuario);
+      const subject = `Signup succeded`;
+      const content = `<h1>You successfully signed up</h1>`;
+      await EmailService.sendEmail(result.email, subject, content);
 
       res.json({
         msge: 'Usuario creado correctamante',
