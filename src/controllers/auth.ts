@@ -20,11 +20,11 @@ class Auth {
         error.statusCode = 401;
         throw error;
       }
-
       const isValidPassword = bcrypt.compareSync(
         result.password,
         user.dataValues.password,
       );
+
       if (!isValidPassword) {
         const error: Error = new Error('Unauthorized');
         error.statusCode = 401;

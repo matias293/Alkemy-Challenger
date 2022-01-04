@@ -142,8 +142,9 @@ class CharacterC {
         msge: 'Character updated',
         characterUpdated,
       });
-    } catch (error) {
-      next(error);
+    } catch (err: any) {
+      if (err.isJoi === true) err.statusCode = 400;
+      next(err);
     }
   }
 

@@ -120,8 +120,9 @@ class MovieC {
       };
       await Movie.create(newMovie);
       res.json(newMovie);
-    } catch (error) {
-      next(error);
+    } catch (err: any) {
+      if (err.isJoi === true) err.statusCode = 400;
+      next(err);
     }
   }
 
@@ -151,6 +152,7 @@ class MovieC {
         movieUpdated,
       });
     } catch (err: any) {
+      if (err.isJoi === true) err.statusCode = 400;
       next(err);
     }
   }
