@@ -1,9 +1,15 @@
-import {Sequelize} from 'sequelize'
+import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('alkemy','root','Matias,17',{
-    host: 'localhost',
+import Config from '../config/index';
+
+const sequelize = new Sequelize(
+  Config.databaseName,
+  Config.username,
+  Config.password,
+  {
+    host: Config.host,
     dialect: 'mysql',
-    
-})
+  },
+);
 
-export default sequelize
+export default sequelize;

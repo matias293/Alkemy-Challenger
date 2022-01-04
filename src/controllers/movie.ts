@@ -8,7 +8,6 @@ import {
   MovieQuery,
   UpdateMovie,
   NewMovies,
-  // MovieFind,
 } from '../common/interfaces/movie.interface';
 
 interface MulterRequest extends Request {

@@ -5,6 +5,18 @@ export interface Movies {
   createdAt: string;
   calification: number;
 }
+export interface MovieFind {
+  id?: number;
+  imagen: string;
+  title: string;
+  createdAt: string;
+  calification: number;
+  genre: {
+    id: number;
+    imagen: string;
+    name: string;
+  };
+}
 
 export interface MovieQuery {
   title?: string;
@@ -22,7 +34,7 @@ export interface NewMovies {
   title: string;
   createdAt: string;
   calification: number;
-  genero:number
+  genero: number;
 }
 
 export interface UpdateMovie {
