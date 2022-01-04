@@ -104,12 +104,10 @@ class MovieC {
     try {
       const result = await newMovieSchema.validateAsync(req.body);
       const foto = (req as MulterRequest).file;
-      if (!foto) {
-        const error: Error = new Error('Seleccione alguna imagen');
-        error.statusCode = 422;
-        throw error;
+      let imageUrl = '';
+      if (foto) {
+        imageUrl = foto.path.replace('\\', '/').split('/')[1];
       }
-      const imageUrl: string = foto.path.replace('\\', '/').split('/')[1];
 
       const newMovie: NewMovies = {
         imagen: imageUrl,
@@ -128,8 +126,13 @@ class MovieC {
 
   async patch(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
+    const foto = (req as MulterRequest).file;
+    let imageUrl = '';
     try {
       const result = await movieUpdateSchema.validateAsync(req.body);
+      if (foto) {
+        imageUrl = foto.path.replace('\\', '/').split('/')[1];
+      }
 
       if (Object.keys(result).length === 0) {
         const error: Error = new Error('Please insert some body');
@@ -137,7 +140,7 @@ class MovieC {
         throw error;
       }
       let updateMovie: UpdateMovie = {};
-      if (result.imagen) updateMovie.imagen = result.imagen;
+      if (foto) updateMovie.imagen = imageUrl;
       if (result.title) updateMovie.title = result.title;
       if (result.createdAt) updateMovie.createdAt = result.createdAt;
       if (result.calification) updateMovie.calification = result.calification;

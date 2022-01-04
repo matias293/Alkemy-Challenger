@@ -43,7 +43,6 @@ export const newMovieSchema = Joi.object({
 });
 
 export const movieUpdateSchema = Joi.object({
-  imagen: Joi.string(),
   title: Joi.string(),
   createdAt: Joi.string(),
   calification: Joi.number(),
