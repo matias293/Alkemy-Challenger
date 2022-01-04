@@ -123,7 +123,7 @@ export default {
         properties: {
           imagen: {
             type: 'array',
-            description: 'Product images.',
+            description: 'Movie images.',
             items: {
               type: 'string',
               format: 'binary',
