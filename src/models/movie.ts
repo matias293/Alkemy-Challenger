@@ -1,8 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 
 import sequelize from '../database/connection';
-import Character from './character';
-import Genero from './genero';
+
 import { Movies } from '../common/interfaces/movie.interface';
 
 class Movie extends Model<Movies> {}
@@ -30,10 +29,14 @@ Movie.init(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    genreId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     sequelize,
-    modelName: 'movie',
+    modelName: 'movies',
     timestamps: false,
   },
 );

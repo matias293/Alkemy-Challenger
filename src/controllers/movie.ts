@@ -109,12 +109,12 @@ class MovieC {
         imageUrl = foto.path.replace('\\', '/').split('/')[1];
       }
 
-      const newMovie: NewMovies = {
+      const newMovie: any = {
         imagen: imageUrl,
         title: result.title,
         createdAt: moment().format('DD/MM/YYYY HH:mm:ss'),
         calification: result.calification,
-        genero: result.genero,
+        // genreId: result.genreId,
       };
       await Movie.create(newMovie);
       res.json(newMovie);

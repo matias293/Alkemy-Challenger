@@ -1,7 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 
 import sequelize from '../database/connection';
-import Movie from './movie';
 
 class Genero extends Model {}
 
@@ -25,10 +24,9 @@ Genero.init(
   },
   {
     sequelize,
-    modelName: 'genero',
+    modelName: 'genres',
     timestamps: false,
   },
 );
-
 
 export default Genero;

@@ -92,12 +92,10 @@ class CharacterC {
     try {
       const result = await newCharacterSchema.validateAsync(req.body);
       const foto = (req as MulterRequest).file;
-      if (!foto) {
-        const error: Error = new Error('Seleccione alguna imagen');
-        error.statusCode = 422;
-        throw error;
+      let imageUrl = '';
+      if (foto) {
+        imageUrl = foto.path.replace('\\', '/').split('/')[1];
       }
-      const imageUrl: string = foto.path.replace('\\', '/').split('/')[1];
 
       const newCharacter: NewCharacters = {
         name: result.name,
@@ -119,8 +117,13 @@ class CharacterC {
 
   async patchCharacter(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
+    const foto = (req as MulterRequest).file;
+    let imageUrl;
     try {
       const result = await updateCharacterSchema.validateAsync(req.body);
+      if (foto) {
+        imageUrl = foto.path.replace('\\', '/').split('/')[1];
+      }
       if (Object.keys(result).length === 0) {
         const error: Error = new Error('Please insert some body');
         error.statusCode = 400;
@@ -132,6 +135,7 @@ class CharacterC {
       if (result.age) updateCharacter.age = result.age;
       if (result.weight) updateCharacter.weight = result.weight;
       if (result.history) updateCharacter.history = result.history;
+      if (foto) updateCharacter.picture = imageUrl;
 
       const characterUpdated = await Character.update(updateCharacter, {
         where: {

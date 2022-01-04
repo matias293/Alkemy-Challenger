@@ -36,11 +36,9 @@ Character.init(
   },
   {
     sequelize,
-    modelName: 'character',
+    modelName: 'characters',
     timestamps: false,
   },
 );
-
-
 
 export default Character;

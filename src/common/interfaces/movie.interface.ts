@@ -4,6 +4,7 @@ export interface Movies {
   title: string;
   createdAt: string;
   calification: number;
+  genreId: number;
 }
 export interface MovieFind {
   id?: number;

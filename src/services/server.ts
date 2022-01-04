@@ -19,27 +19,27 @@ app.use(express.urlencoded({ extended: false }));
 
 Movie.belongsTo(Genero, {
   as: 'genre',
-  foreignKey: 'genero',
+  foreignKey: 'genreId',
 });
 
 Movie.belongsToMany(Character, {
-  as: 'personajes',
-  through: {model:MovieCharacter},
-  foreignKey: 'personajeId',
-
+  as: 'characters',
+  through: 'movieCharacter',
+  foreignKey: 'movieId',
+  otherKey: 'characterId',
 });
-
 
 Character.belongsToMany(Movie, {
-  as: 'films',
-  through: {model:MovieCharacter},
-  foreignKey: 'filmId',
+  as: 'movies',
+  through: 'movieCharacter',
+  foreignKey: 'characterId',
+  otherKey: 'movieId',
 });
 
- Genero.hasMany(Movie, {
-    as: 'films',
-    foreignKey: 'genero',
-  });
+Genero.hasMany(Movie, {
+  as: 'movies',
+  foreignKey: 'genreId',
+});
 
 app.use('/characters', charactersRouter);
 app.use('/auth', authRoutes);

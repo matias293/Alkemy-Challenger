@@ -24,8 +24,8 @@ MovieCharacters.init(
   },
   {
     sequelize,
-    modelName: 'films_personajes',
+    modelName: 'movieCharacter',
     timestamps: false,
   },
 );
-export default MovieCharacters
+export default MovieCharacters;

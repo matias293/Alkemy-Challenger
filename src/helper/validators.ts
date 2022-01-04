@@ -39,7 +39,7 @@ export const updateCharacterSchema = Joi.object({
 export const newMovieSchema = Joi.object({
   title: Joi.string().required(),
   calification: Joi.number().required(),
-  genero: Joi.number().required(),
+  genreId: Joi.number().required(),
 });
 
 export const movieUpdateSchema = Joi.object({
