@@ -2,6 +2,8 @@
 
 Recuerden que deben de ejecutar `npm install` para reconstruir los módulos de Node.
 
+Crear Base de datos
+
 Para correr el servidor recomiendo correr `npm run build` && `npm run start`
 
 Para escuchar cambios en typescript `npm run watch`
