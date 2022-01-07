@@ -79,7 +79,11 @@ class MovieC {
         }
         if (genre) {
           movies = await Movie.findAll({
-            include: [{ association: 'characters' }],
+            where: { genreId: genre },
+            include: [
+              { association: 'characters' },
+              { association: 'moviegenre' },
+            ],
           });
         }
 
