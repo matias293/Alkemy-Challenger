@@ -35,7 +35,7 @@ class CharacterC {
   async getCharacter(req: Request, res: Response, next: NextFunction) {
     try {
       const character = await Character.findByPk(req.params.id, {
-        include: [{ association: 'films', include: ['genre'] }],
+        include: [{ association: 'movies', include: ['moviegenre'] }],
       });
       if (!character) {
         const error: Error = new Error(`Did't find any character`);
@@ -56,10 +56,11 @@ class CharacterC {
     try {
       if (name) query.name = name as string;
       if (age) query.age = Number(age);
+      if (movie) query.movie = movie as string;
 
       if (Object.keys(query).length) {
         const characters = await Character.findAll({
-          include: [{ association: 'films', include: ['genre'] }],
+          include: [{ association: 'movies', include: ['moviegenre'] }],
           where: query,
         });
 

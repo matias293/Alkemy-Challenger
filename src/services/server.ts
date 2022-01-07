@@ -17,28 +17,26 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-Movie.belongsTo(Genero, {
-  as: 'genre',
+Movie.hasMany(Genero, {
+  as: 'moviegenre',
+  foreignKey: 'genreId',
+});
+
+Genero.belongsTo(Movie, {
+  as: 'genremovies',
   foreignKey: 'genreId',
 });
 
 Movie.belongsToMany(Character, {
   as: 'characters',
-  through: 'movieCharacter',
+  through: MovieCharacter,
   foreignKey: 'movieId',
-  otherKey: 'characterId',
 });
 
 Character.belongsToMany(Movie, {
   as: 'movies',
-  through: 'movieCharacter',
+  through: MovieCharacter,
   foreignKey: 'characterId',
-  otherKey: 'movieId',
-});
-
-Genero.hasMany(Movie, {
-  as: 'movies',
-  foreignKey: 'genreId',
 });
 
 app.use('/characters', charactersRouter);

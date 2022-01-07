@@ -10,8 +10,13 @@ router.get('/:id', movieController.getMovie);
 
 router.post('/', validarJWT, movieController.postMovie);
 
-router.put('/', validarJWT, movieController.patch);
+router.put('/', validarJWT, movieController.movieExist, movieController.patch);
 
-router.delete('/', validarJWT, movieController.deleteMovie);
+router.delete(
+  '/',
+  validarJWT,
+  movieController.movieExist,
+  movieController.deleteMovie,
+);
 
 export default router;

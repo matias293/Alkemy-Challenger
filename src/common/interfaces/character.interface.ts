@@ -31,8 +31,8 @@ export interface UpdateCharacters {
 export interface Query {
   name?: string;
   age?: number;
-  films?: any;
+  movie?: string;
 }
-export interface Film {
+export interface Movies {
   id?: number;
 }

@@ -8,18 +8,8 @@ MovieCharacters.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
       primaryKey: true,
       autoIncrement: true,
-    },
-
-    personajeId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-    },
-    filmId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
     },
   },
   {

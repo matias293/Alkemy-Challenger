@@ -61,19 +61,25 @@ class MovieC {
         let movies: any = [];
         if (title) {
           movies = await Movie.findAll({
-            where: query,
-            include: [{ association: 'personajes' }, { association: 'genre' }],
+            where: { title },
+            include: [
+              { association: 'characters' },
+              { association: 'moviegenre' },
+            ],
           });
         }
         if (order) {
           movies = await Movie.findAll({
             order: [['createdAt', order as string]],
-            include: [{ association: 'personajes' }, { association: 'genre' }],
+            include: [
+              { association: 'characters' },
+              { association: 'moviegenre' },
+            ],
           });
         }
         if (genre) {
           movies = await Movie.findAll({
-            include: [{ association: 'personajes' }, { association: 'genre' }],
+            include: [{ association: 'characters' }],
           });
         }
 
@@ -114,7 +120,7 @@ class MovieC {
         title: result.title,
         createdAt: moment().format('DD/MM/YYYY HH:mm:ss'),
         calification: result.calification,
-        // genreId: result.genreId,
+        genreId: result.genreId,
       };
       await Movie.create(newMovie);
       res.json(newMovie);
