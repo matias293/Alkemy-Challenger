@@ -24,7 +24,7 @@ Movie.hasMany(Genero, {
 
 Genero.belongsTo(Movie, {
   as: 'genremovies',
-  foreignKey: 'genreId',
+  foreignKey: 'id',
 });
 
 Movie.belongsToMany(Character, {

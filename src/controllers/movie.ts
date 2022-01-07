@@ -53,10 +53,6 @@ class MovieC {
     let query: MovieQuery = {};
 
     try {
-      if (title) query.title = title as string;
-      if (genre) query.genre = genre as string;
-      if (order) query.order = order as string;
-
       if (title || genre || order) {
         let movies: any = [];
         if (title) {
@@ -79,7 +75,7 @@ class MovieC {
         }
         if (genre) {
           movies = await Movie.findAll({
-            where: { genreId: genre },
+            where: { genreId: Number(genre) },
             include: [
               { association: 'characters' },
               { association: 'moviegenre' },
